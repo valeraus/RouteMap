@@ -1,35 +1,67 @@
-﻿let map;
+﻿
+function RouteMap(directionsService, directionsRenderer, data) {
+    console.log(data);
+    directionsService
+        .route({
+            origin: data.origin,
+            destination: data.destination,
+            waypoints: data.waypoints,
+            optimizeWaypoints: true,
+            travelMode: google.maps.TravelMode.WALKING, //DRIVING WALKING
+        })
+        .then((response) => {
+            directionsRenderer.setDirections(response);
+        })
+}
+
+
+
+
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
+    var el = app.InitMapElement();
+
+    var map = new google.maps.Map(el, {
         center: { lat: 50.44952836682165, lng: 30.600016080711644 },
         disableDefaultUI: true,
-        zoom: 14,
+        zoom: 12,
     });
 
-//50.44952836682165, 30.600016080711644
-//50.48307483695035, 30.39718793209465
-    const marker = new google.maps.Marker({
-        position: {
-            lat: 50.44952836682165,
-            lng: 30.600016080711644
-        },
-        map: map,
-    });
-    const infowindow = new google.maps.InfoWindow({
-        content: "Відправна точка",
-    });
-    marker.addListener("click", () => {
-        infowindow.open(marker.get("map"), marker);
+    let infoWindow = new google.maps.InfoWindow({
+        content: "Моя работа!",
+        position: { lat: 50.44952836682165, lng: 30.600016080711644 },
     });
 
-
-    const home = { lat: 50.48307483695035, lng: 30.39718793209465 };
-    var button = document.getElementById("myButton");
-    button.addEventListener("click", () => {
-        map.setCenter(home);
+    map.addListener("click", (mapsMouseEvent) => {
+        // Close the current InfoWindow.
+        infoWindow.close();
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow({
+            position: mapsMouseEvent.latLng,
+        });
+        infoWindow.setContent(
+            //JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            "Центральная точка"
+        );
+        infoWindow.open(map);
     });
-    return controlButton;
+    el.addEventListener("view-info", (e) => {
+        infoWindow.close();
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow(e.detail);
 
+        infoWindow.open(map);
+    });
+
+    infoWindow.open(map);
+
+    const directionsService = new google.maps.DirectionsService();
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+
+    el.addEventListener("path-update", (e) => {
+
+        RouteMap(directionsService, directionsRenderer, e.detail);
+        directionsRenderer.setMap(map);
+    });
 }
 window.initMap = initMap;

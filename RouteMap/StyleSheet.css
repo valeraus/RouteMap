@@ -1,7 +1,10 @@
-﻿#map {
+﻿.map {
     height: 100%;
 }
-
+#app {
+    height: 100vh;
+    width: 100vw;
+}
 /* 
  * Optional: Makes the sample page fill the window. 
  */
@@ -21,15 +24,15 @@ body {
 .menu-bottom button {
     padding: 30px;
 }
-.menu{
+.menu {
     width: 60vw;
-    height:60vh;
-    background: #fff;
+    height: 60vh;
     position: fixed;
-    border: lpx solid #ccc;
-    bottom: 20vh;
-    left:20vw;
-    z-index:10;
+    background: #fff;
+    border: 1px solid #ccc;
+    top: 20vh;
+    left: 20vw;
+    z-index: 10;
     pointer-events: none;
     opacity: 0;
     transition: 0.3s;

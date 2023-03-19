@@ -7,22 +7,42 @@
 </head>
 <body>
     <div id="app">
+
         <div class="menu-bottom">
-            <button v-on:click="MenuShow()">Прокласти маршрут{{message}}</button>
-        </div>
-        <div class="menu" v-bind:class ="{active:show}">
-            <button id="myButton">Показати на карті</button>
-            <input v-model="message"/>
+            <button v-on:click="MenuShow()">Прокласти маршрут</button>
         </div>
 
+        <div class="menu" v-bind:class="{active:show}">
+
+            <div>
+                <input v-model.number="origin.lat" />
+                <input v-model.number="origin.lng" />
+            </div>
+
+            <div>
+                <input v-model.number="destination.lat" />
+                <input v-model.number="destination.lng" />
+            </div>
+
+
+            <ul>
+                <li v-for="points in waypoints">
+                    <input v-model.number="points.location.lat" />
+                    <input v-model.number="points.location.lng" />
+                </li>
+            </ul>
+            <button v-on:click="AddWaypoint()">Додати точку</button>
+            <button v-on:click="RouteMap()">Показати на карті</button>
+        </div>
+
+        <div class="map" ref="map"></div>
     </div>
 
-    <div id="map"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.js"></script>
-
-    <script src="main.js"></script>
     <script src="JavaScript.js"></script>
+    <script src="main.js"></script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
             defer></script>
 
